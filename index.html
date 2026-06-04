@@ -491,9 +491,15 @@ select { cursor: pointer; }
 <!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getDatabase, ref, set as fbSet, onValue, serverTimestamp }
+import { getDatabase, ref, set as fbSet, onValue }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-window.__firebaseModules = { initializeApp, getDatabase, ref, fbSet, onValue, serverTimestamp };
+
+window.__fbInitApp = initializeApp;
+window.__fbGetDatabase = getDatabase;
+window.__fbRef = ref;
+window.__fbSet = fbSet;
+window.__fbOnValue = onValue;
+window.__firebaseReady = true;
 window.dispatchEvent(new Event('firebaseReady'));
 </script>
 </head>
@@ -1202,10 +1208,14 @@ function lsSave() {
 
 // ── Firebase init ──
 async function initFirebase(cfg, onFirstLoad) {
-  if (!window.__firebaseModules) {
+  if (!window.__firebaseReady) {
     await new Promise(r => window.addEventListener('firebaseReady', r, {once:true}));
   }
-  const { initializeApp, getDatabase, ref, fbSet, onValue } = window.__firebaseModules;
+  const initializeApp = window.__fbInitApp;
+  const getDatabase = window.__fbGetDatabase;
+  const ref = window.__fbRef;
+  const fbSet = window.__fbSet;
+  const onValue = window.__fbOnValue;
   const app = initializeApp({
     apiKey: cfg.apiKey,
     databaseURL: cfg.databaseURL,
@@ -1247,9 +1257,9 @@ async function initFirebase(cfg, onFirstLoad) {
 
 // ── Push to Firebase ──
 function fbPush() {
-  if (!fbRef || !window.__firebaseModules) return;
-  const { fbSet } = window.__firebaseModules;
-  fbSet(fbRef, data).catch(e => {
+  if (!fbRef || !window.__fbSet) return;
+  window.__fbSet(fbRef, data).catch(e => {
+    console.error('Firebase 저장 오류:', e);
     setSyncState('red', '⚠️ 저장 실패');
   });
 }
