@@ -559,27 +559,27 @@ window.dispatchEvent(new Event('firebaseReady'));
     <div class="field-row">
       <div class="field-group">
         <div class="field-label">신랑 이름</div>
-        <input type="text" id="groomName" placeholder="신랑">
+        <input type="text" id="groomName" data-key="groomName" placeholder="신랑">
       </div>
       <div class="field-group">
         <div class="field-label">신부 이름</div>
-        <input type="text" id="brideName" placeholder="신부">
+        <input type="text" id="brideName" data-key="brideName" placeholder="신부">
       </div>
     </div>
     <div class="field-row">
       <div class="field-group">
         <div class="field-label">결혼식 날짜</div>
-        <input type="date" id="weddingDate">
+        <input type="date" id="weddingDate" data-key="weddingDate">
       </div>
       <div class="field-group">
         <div class="field-label">결혼식 시간</div>
-        <input type="time" id="weddingTime">
+        <input type="time" id="weddingTime" data-key="weddingTime">
       </div>
     </div>
     <div class="field-row full">
       <div class="field-group">
         <div class="field-label">결혼식 장소</div>
-        <input type="text" id="weddingVenue" placeholder="웨딩홀 이름">
+        <input type="text" id="weddingVenue" data-key="weddingVenue" placeholder="웨딩홀 이름">
       </div>
     </div>
   </div>
@@ -629,11 +629,11 @@ window.dispatchEvent(new Event('firebaseReady'));
     <div class="field-row" style="margin-top:14px;">
       <div class="field-group">
         <div class="field-label">총 예산 (만원)</div>
-        <input type="number" id="totalBudget" placeholder="예: 5000">
+        <input type="number" id="totalBudget" data-key="totalBudget" placeholder="예: 5000">
       </div>
       <div class="field-group">
         <div class="field-label">사용 예산 (만원)</div>
-        <input type="number" id="usedBudget" placeholder="자동 집계">
+        <input type="number" id="usedBudget" data-key="usedBudget" placeholder="자동 집계">
       </div>
     </div>
   </div>
