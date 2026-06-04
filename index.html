@@ -640,7 +640,7 @@ window.dispatchEvent(new Event('firebaseReady'));
 
   <div class="card">
     <div class="card-title">메모 & 다짐</div>
-    <textarea id="dashMemo" placeholder="우리 결혼 준비 메모..."></textarea>
+    <textarea id="dashMemo" data-key="dashMemo" placeholder="우리 결혼 준비 메모..."></textarea>
   </div>
 </div>
 
@@ -1257,11 +1257,17 @@ async function initFirebase(cfg, onFirstLoad) {
 
 // ── Push to Firebase ──
 function fbPush() {
-  if (!fbRef || !window.__fbSet) return;
-  window.__fbSet(fbRef, data).catch(e => {
-    console.error('Firebase 저장 오류:', e);
-    setSyncState('red', '⚠️ 저장 실패');
-  });
+  if (!fbRef || !window.__fbSet) {
+    console.warn('fbPush 스킵: fbRef=', !!fbRef, '__fbSet=', !!window.__fbSet);
+    return;
+  }
+  console.log('Firebase 저장 시도, 데이터 키:', Object.keys(data));
+  window.__fbSet(fbRef, data)
+    .then(() => console.log('Firebase 저장 성공'))
+    .catch(e => {
+      console.error('Firebase 저장 오류:', e);
+      setSyncState('red', '⚠️ 저장 실패: ' + e.message);
+    });
 }
 
 // ── load ──
@@ -1367,6 +1373,18 @@ function refreshAll() {
 // ===== BIND INPUTS =====
 function bindInputs() {
   document.querySelectorAll('[data-key]').forEach(el => {
+    if (el.__bound) {
+      // 값만 갱신, 리스너 중복 방지
+      const key = el.dataset.key;
+      if (el.type === 'checkbox') {
+        el.checked = !!get(key, false);
+      } else {
+        const cur = get(key, '');
+        if (el.value !== String(cur)) el.value = cur;
+      }
+      return;
+    }
+    el.__bound = true;
     const key = el.dataset.key;
     if (el.type === 'checkbox') {
       el.checked = !!get(key, false);
