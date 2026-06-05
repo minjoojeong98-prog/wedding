@@ -500,18 +500,26 @@ select { cursor: pointer; }
 </style>
 
 <!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getDatabase, ref, set as fbSet, onValue }
-  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-
-window.__fbInitApp = initializeApp;
-window.__fbGetDatabase = getDatabase;
-window.__fbRef = ref;
-window.__fbSet = fbSet;
-window.__fbOnValue = onValue;
-window.__firebaseReady = true;
-window.dispatchEvent(new Event('firebaseReady'));
+<script>
+(function() {
+  var s1 = document.createElement('script');
+  s1.src = 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
+  s1.onload = function() {
+    var s2 = document.createElement('script');
+    s2.src = 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js';
+    s2.onload = function() {
+      window.__fbInitApp = function(cfg) { return firebase.initializeApp(cfg); };
+      window.__fbGetDatabase = function(app) { return app.database(); };
+      window.__fbRef = function(db, path) { return db.ref(path); };
+      window.__fbSet = function(ref, data) { return ref.set(data); };
+      window.__fbOnValue = function(ref, cb, errCb) { ref.on('value', cb, errCb); };
+      window.__firebaseReady = true;
+      window.dispatchEvent(new Event('firebaseReady'));
+    };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+})();
 </script>
 </head>
 <body>
