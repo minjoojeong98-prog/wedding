@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="manifest" href="/wedding/manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="웨딩 플래너">
+<meta name="theme-color" content="#e8a0b4">
+<link rel="apple-touch-icon" href="/wedding/icon-192.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💍 Wedding Master Planner</title>
@@ -1965,6 +1972,13 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+</script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/wedding/service-worker.js');
+    });
+  }
 </script>
 </body>
 </html>
