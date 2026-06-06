@@ -185,6 +185,42 @@ input:focus, textarea:focus, select:focus {
 textarea { resize: vertical; min-height: 72px; }
 select { cursor: pointer; }
 
+/* ===== LINK INPUT ROW ===== */
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.link-row input {
+  flex: 1;
+}
+.link-open-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--cream);
+  color: var(--coral);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.link-open-btn:hover {
+  background: var(--soft-pink);
+  border-color: var(--coral);
+}
+.link-open-btn.disabled {
+  color: var(--border);
+  cursor: default;
+  pointer-events: none;
+}
+
 /* ===== CHECKBOX ===== */
 .check-item {
   display: flex;
@@ -743,6 +779,14 @@ select { cursor: pointer; }
         <select data-key="ring_status"><option>미정</option><option>검토중</option><option>계약완료</option><option>수령완료</option></select>
       </div>
     </div>
+    <!-- 링크 추가 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="ring_link" placeholder="https://..." oninput="updateLinkBtn('ring_link_btn', this.value)">
+        <a id="ring_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('ring_link_btn', event)">🔗</a>
+      </div>
+    </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea data-key="ring_memo" placeholder="디자인, 사이즈 등"></textarea></div></div>
   </div>
 </div>
@@ -757,16 +801,40 @@ select { cursor: pointer; }
 
   <div class="card">
     <div class="card-title">가전 제품</div>
+    <!-- 가전 링크 -->
+    <div class="field-group" style="margin-bottom:12px;">
+      <div class="field-label">참고 링크</div>
+      <div class="link-row">
+        <input type="url" data-key="appliance_link" placeholder="https://...">
+        <a id="appliance_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('appliance_link_btn', event)">🔗</a>
+      </div>
+    </div>
     <div id="applianceList"></div>
   </div>
 
   <div class="card">
     <div class="card-title">가구</div>
+    <!-- 가구 링크 -->
+    <div class="field-group" style="margin-bottom:12px;">
+      <div class="field-label">참고 링크</div>
+      <div class="link-row">
+        <input type="url" data-key="furniture_link" placeholder="https://...">
+        <a id="furniture_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('furniture_link_btn', event)">🔗</a>
+      </div>
+    </div>
     <div id="furnitureList"></div>
   </div>
 
   <div class="card">
     <div class="card-title">생활용품</div>
+    <!-- 생활용품 링크 -->
+    <div class="field-group" style="margin-bottom:12px;">
+      <div class="field-label">참고 링크</div>
+      <div class="link-row">
+        <input type="url" data-key="daily_link" placeholder="https://...">
+        <a id="daily_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('daily_link_btn', event)">🔗</a>
+      </div>
+    </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">식기</div><input type="text" data-key="kitchen_ware" placeholder="브랜드/수량"></div></div>
     <div class="field-row full"><div class="field-group"><div class="field-label">이불/침구</div><input type="text" data-key="bedding" placeholder="브랜드/세트"></div></div>
     <div class="field-row full"><div class="field-group"><div class="field-label">수건</div><input type="text" data-key="towel"></div></div>
@@ -944,6 +1012,14 @@ select { cursor: pointer; }
       <div class="field-group"><div class="field-label">컬러/스타일</div><input type="text" data-key="groom_suit_style"></div>
       <div class="field-group"><div class="field-label">피팅일</div><input type="date" data-key="groom_suit_fit"></div>
     </div>
+    <!-- 예복 링크 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="groom_suit_link" placeholder="https://..." oninput="updateLinkBtn('groom_suit_link_btn', this.value)">
+        <a id="groom_suit_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('groom_suit_link_btn', event)">🔗</a>
+      </div>
+    </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea data-key="groom_suit_memo"></textarea></div></div>
   </div>
 
@@ -953,6 +1029,14 @@ select { cursor: pointer; }
       <div class="field-group"><div class="field-label">브랜드/업체</div><input type="text" data-key="groom_shoes"></div>
       <div class="field-group"><div class="field-label">가격 (만원)</div><input type="number" data-key="groom_shoes_price"></div>
     </div>
+    <!-- 구두 링크 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="groom_shoes_link" placeholder="https://..." oninput="updateLinkBtn('groom_shoes_link_btn', this.value)">
+        <a id="groom_shoes_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('groom_shoes_link_btn', event)">🔗</a>
+      </div>
+    </div>
   </div>
 
   <div class="card">
@@ -960,6 +1044,14 @@ select { cursor: pointer; }
     <div class="field-row">
       <div class="field-group"><div class="field-label">헤어샵</div><input type="text" data-key="groom_hair_shop"></div>
       <div class="field-group"><div class="field-label">예약 시간</div><input type="time" data-key="groom_hair_time"></div>
+    </div>
+    <!-- 헤어 링크 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="groom_hair_link" placeholder="https://..." oninput="updateLinkBtn('groom_hair_link_btn', this.value)">
+        <a id="groom_hair_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('groom_hair_link_btn', event)">🔗</a>
+      </div>
     </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea data-key="groom_hair_memo"></textarea></div></div>
   </div>
@@ -982,6 +1074,14 @@ select { cursor: pointer; }
       <div class="field-group"><div class="field-label">스타일/라인</div><input type="text" data-key="bride_dress_style" placeholder="A라인, 볼가운..."></div>
       <div class="field-group"><div class="field-label">피팅일</div><input type="date" data-key="bride_dress_fit"></div>
     </div>
+    <!-- 드레스 링크 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="bride_dress_link" placeholder="https://..." oninput="updateLinkBtn('bride_dress_link_btn', this.value)">
+        <a id="bride_dress_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('bride_dress_link_btn', event)">🔗</a>
+      </div>
+    </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea data-key="bride_dress_memo"></textarea></div></div>
   </div>
 
@@ -995,6 +1095,14 @@ select { cursor: pointer; }
       <div class="field-group"><div class="field-label">예약일</div><input type="date" data-key="bride_makeup_date"></div>
       <div class="field-group"><div class="field-label">시작 시간</div><input type="time" data-key="bride_makeup_time"></div>
     </div>
+    <!-- 메이크업 링크 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="bride_makeup_link" placeholder="https://..." oninput="updateLinkBtn('bride_makeup_link_btn', this.value)">
+        <a id="bride_makeup_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('bride_makeup_link_btn', event)">🔗</a>
+      </div>
+    </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">메모/원하는 스타일</div><textarea data-key="bride_makeup_memo"></textarea></div></div>
   </div>
 
@@ -1003,6 +1111,14 @@ select { cursor: pointer; }
     <div class="field-row">
       <div class="field-group"><div class="field-label">꽃집/업체</div><input type="text" data-key="bride_bouquet_shop"></div>
       <div class="field-group"><div class="field-label">가격 (만원)</div><input type="number" data-key="bride_bouquet_price"></div>
+    </div>
+    <!-- 부케 링크 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="bride_bouquet_link" placeholder="https://..." oninput="updateLinkBtn('bride_bouquet_link_btn', this.value)">
+        <a id="bride_bouquet_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('bride_bouquet_link_btn', event)">🔗</a>
+      </div>
     </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">컨셉/꽃 종류</div><textarea data-key="bride_bouquet_style"></textarea></div></div>
   </div>
@@ -1016,6 +1132,14 @@ select { cursor: pointer; }
     <div class="field-row">
       <div class="field-group"><div class="field-label">예약일</div><input type="date" data-key="bride_nail_date"></div>
       <div class="field-group"><div class="field-label">디자인 메모</div><input type="text" data-key="bride_nail_style"></div>
+    </div>
+    <!-- 네일 링크 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div class="field-label">링크</div>
+      <div class="link-row">
+        <input type="url" data-key="bride_nail_link" placeholder="https://..." oninput="updateLinkBtn('bride_nail_link_btn', this.value)">
+        <a id="bride_nail_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('bride_nail_link_btn', event)">🔗</a>
+      </div>
     </div>
   </div>
 
@@ -1191,6 +1315,49 @@ select { cursor: pointer; }
 </div>
 
 <script>
+// ===== LINK HELPERS =====
+// 링크 버튼 활성화/비활성화 & 클릭 처리
+function updateLinkBtn(btnId, url) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  const trimmed = url ? url.trim() : '';
+  if (trimmed) {
+    btn.href = trimmed;
+    btn.classList.remove('disabled');
+  } else {
+    btn.href = '#';
+    btn.classList.add('disabled');
+  }
+}
+
+function openLink(btnId, e) {
+  const btn = document.getElementById(btnId);
+  if (!btn || btn.classList.contains('disabled')) {
+    e.preventDefault();
+    return false;
+  }
+  return true; // 정상 링크 열기
+}
+
+// data-key가 _link 로 끝나는 필드 로드 시 버튼 상태 초기화
+function initLinkBtns() {
+  document.querySelectorAll('input[data-key$="_link"]').forEach(function(inp) {
+    const key = inp.dataset.key;
+    const btnId = key + '_btn';
+    const val = get(key, '');
+    inp.value = val;
+    updateLinkBtn(btnId, val);
+
+    if (!inp.__linkBound) {
+      inp.__linkBound = true;
+      inp.addEventListener('input', function() {
+        set(key, inp.value);
+        updateLinkBtn(btnId, inp.value);
+      });
+    }
+  });
+}
+
 // ===== DATA STORE (Firebase + localStorage fallback) =====
 const DB_KEY = 'weddingPlannerV3';
 const FB_CONFIG_KEY = 'wpFirebaseConfig';
@@ -1249,7 +1416,6 @@ async function initFirebase(cfg, onFirstLoad) {
   onValue(fbRef, (snapshot) => {
     const remote = snapshot.val();
     if (firstLoad) {
-      // 페이지 로드 시 첫 수신 — Firebase 데이터로 화면 초기화
       firstLoad = false;
       if (remote && typeof remote === 'object') {
         data = remote;
@@ -1258,7 +1424,6 @@ async function initFirebase(cfg, onFirstLoad) {
       setSyncState('green', '✓ 연결됨');
       if (onFirstLoad) onFirstLoad();
     } else {
-      // 이후 실시간 수신 — 상대방이 바꾼 경우만 반영
       if (!isSyncing && remote && typeof remote === 'object') {
         data = remote;
         lsSave();
@@ -1268,7 +1433,7 @@ async function initFirebase(cfg, onFirstLoad) {
     }
   }, (err) => {
     setSyncState('red', '⚠️ 연결 오류');
-    if (onFirstLoad) onFirstLoad(); // 에러여도 화면은 그려야 함
+    if (onFirstLoad) onFirstLoad();
   });
 
   return true;
@@ -1276,17 +1441,10 @@ async function initFirebase(cfg, onFirstLoad) {
 
 // ── Push to Firebase ──
 function fbPush() {
-  if (!fbRef || !window.__fbSet) {
-    console.warn('fbPush 스킵: fbRef=', !!fbRef, '__fbSet=', !!window.__fbSet);
-    return;
-  }
-  console.log('Firebase 저장 시도, 데이터 키:', Object.keys(data));
-  window.__fbSet(fbRef, data)
-    .then(() => console.log('Firebase 저장 성공'))
-    .catch(e => {
-      console.error('Firebase 저장 오류:', e);
-      setSyncState('red', '⚠️ 저장 실패: ' + e.message);
-    });
+  if (!fbRef || !window.__fbSet) return;
+  window.__fbSet(fbRef, data).catch(e => {
+    setSyncState('red', '⚠️ 저장 실패: ' + e.message);
+  });
 }
 
 // ── load ──
@@ -1384,6 +1542,7 @@ function refreshAll() {
   renderHomes();
   renderInteriors();
   bindInputs();
+  initLinkBtns();
   updateDday();
   updateBudget();
   updateCheckStats();
@@ -1392,8 +1551,10 @@ function refreshAll() {
 // ===== BIND INPUTS =====
 function bindInputs() {
   document.querySelectorAll('[data-key]').forEach(el => {
+    // link 필드는 initLinkBtns에서 처리
+    if (el.dataset.key && el.dataset.key.endsWith('_link')) return;
+
     if (el.__bound) {
-      // 값만 갱신, 리스너 중복 방지
       const key = el.dataset.key;
       if (el.type === 'checkbox') {
         el.checked = !!get(key, false);
@@ -1519,7 +1680,6 @@ function updateCheckStats() {
     });
   });
   document.getElementById('dashDone').textContent = done;
-  // Update visual
   document.querySelectorAll('.check-item').forEach(el => {
     const cb = el.querySelector('input[type="checkbox"]');
     if (cb) el.classList.toggle('done', cb.checked);
@@ -1633,7 +1793,7 @@ function delSchedDetail(i) {
 // ===== VENUE =====
 function addVenue() {
   const list = get('venues', []);
-  list.push({ name:'', location:'', min_guests:'', meal_cost:'', total_cost:'', deposit:'', mid:'', balance:'', pros:'', cons:'' });
+  list.push({ name:'', location:'', min_guests:'', meal_cost:'', total_cost:'', deposit:'', mid:'', balance:'', pros:'', cons:'', link:'' });
   set('venues', list);
   renderVenues();
 }
@@ -1644,6 +1804,8 @@ function renderVenues() {
   list.forEach((v, i) => {
     const card = document.createElement('div');
     card.className = 'card';
+    const linkVal = (v.link || '').replace(/"/g, '&quot;');
+    const linkDisabled = v.link ? '' : 'disabled';
     card.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
         <div class="card-title" style="margin:0;">🏛️ 업체 ${i+1}</div>
@@ -1663,6 +1825,13 @@ function renderVenues() {
         <div class="field-group"><div class="field-label">중도금</div><input type="text" value="${v.mid}" onchange="updateVenue(${i},'mid',this.value)"></div>
         <div class="field-group"><div class="field-label">잔금</div><input type="text" value="${v.balance}" onchange="updateVenue(${i},'balance',this.value)"></div>
       </div>
+      <div class="field-group" style="margin-bottom:10px;">
+        <div class="field-label">링크</div>
+        <div class="link-row">
+          <input type="url" value="${linkVal}" placeholder="https://..." oninput="updateVenueLink(${i}, this)">
+          <a id="venue_link_btn_${i}" class="link-open-btn ${linkDisabled}" href="${v.link || '#'}" target="_blank" rel="noopener" onclick="return openLink('venue_link_btn_${i}', event)">🔗</a>
+        </div>
+      </div>
       <div class="field-row">
         <div class="field-group"><div class="field-label">장점</div><textarea rows="2" onchange="updateVenue(${i},'pros',this.value)">${v.pros}</textarea></div>
         <div class="field-group"><div class="field-label">단점</div><textarea rows="2" onchange="updateVenue(${i},'cons',this.value)">${v.cons}</textarea></div>
@@ -1670,13 +1839,23 @@ function renderVenues() {
     c.appendChild(card);
   });
 }
+function updateVenueLink(i, inp) {
+  const val = inp.value.trim();
+  updateLink(i, val, `venue_link_btn_${i}`, 'venues', 'link');
+}
+function updateLink(i, val, btnId, listKey, field) {
+  const l = get(listKey, []);
+  l[i][field] = val;
+  set(listKey, l);
+  updateLinkBtn(btnId, val);
+}
 function updateVenue(i, key, val) { const l = get('venues',[]); l[i][key]=val; set('venues',l); }
 function delVenue(i) { const l = get('venues',[]); l.splice(i,1); set('venues',l); renderVenues(); }
 
 // ===== SDM =====
 function addSDM() {
   const list = get('sdm', []);
-  list.push({ type:'스튜디오', name:'', cost:'', includes:'', extra:'', contract_date:'' });
+  list.push({ type:'스튜디오', name:'', cost:'', includes:'', extra:'', contract_date:'', link:'' });
   set('sdm', list);
   renderSDM();
 }
@@ -1687,6 +1866,8 @@ function renderSDM() {
   list.forEach((s, i) => {
     const card = document.createElement('div');
     card.className = 'card';
+    const linkVal = (s.link || '').replace(/"/g, '&quot;');
+    const linkDisabled = s.link ? '' : 'disabled';
     card.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
         <div class="card-title" style="margin:0;">💄 업체 ${i+1}</div>
@@ -1709,9 +1890,20 @@ function renderSDM() {
       <div class="field-row">
         <div class="field-group"><div class="field-label">포함 항목</div><input type="text" value="${s.includes}" onchange="updateSDM(${i},'includes',this.value)"></div>
         <div class="field-group"><div class="field-label">계약일</div><input type="date" value="${s.contract_date}" onchange="updateSDM(${i},'contract_date',this.value)"></div>
+      </div>
+      <div class="field-group" style="margin-bottom:10px;">
+        <div class="field-label">링크</div>
+        <div class="link-row">
+          <input type="url" value="${linkVal}" placeholder="https://..." oninput="updateSDMLink(${i}, this)">
+          <a id="sdm_link_btn_${i}" class="link-open-btn ${linkDisabled}" href="${s.link || '#'}" target="_blank" rel="noopener" onclick="return openLink('sdm_link_btn_${i}', event)">🔗</a>
+        </div>
       </div>`;
     c.appendChild(card);
   });
+}
+function updateSDMLink(i, inp) {
+  const val = inp.value.trim();
+  updateLink(i, val, `sdm_link_btn_${i}`, 'sdm', 'link');
 }
 function updateSDM(i, key, val) { const l = get('sdm',[]); l[i][key]=val; set('sdm',l); }
 function delSDM(i) { const l = get('sdm',[]); l.splice(i,1); set('sdm',l); renderSDM(); }
@@ -1910,7 +2102,6 @@ function addInterior() {
   const list = get('interiors', []);
   list.push({ name:'', estimate:'', start:'', end:'' });
   set('interiors', list);
-  renderHomes();
   renderInteriors();
 }
 function renderInteriors() {
@@ -1955,6 +2146,7 @@ function renderEverything() {
   renderHomes();
   renderInteriors();
   bindInputs();
+  initLinkBtns();
   updateDday();
   updateBudget();
   updateCheckStats();
