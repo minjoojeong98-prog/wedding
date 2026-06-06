@@ -1,4 +1,4 @@
-<!-- WEDDING PLANNER v4 - GUEST ROW MOBILE FIX -->
+<!-- WEDDING PLANNER v5 - CLOUDINARY IMAGE GALLERY -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -534,7 +534,259 @@ select { cursor: pointer; }
 .sync-dot.yellow { background: #ff9800; animation: pulse 1s infinite; }
 .sync-dot.red { background: #f44336; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* ===== IMAGE GALLERY ===== */
+.img-gallery-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px var(--shadow);
+  border: 1px solid var(--border);
+}
+.img-gallery-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--coral);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.img-gallery-title::before {
+  content: '';
+  width: 4px;
+  height: 18px;
+  background: linear-gradient(to bottom, var(--coral), var(--peach));
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.img-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.img-slot {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--cream);
+  border: 2px dashed var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.img-slot:hover { border-color: var(--coral); }
+.img-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.img-slot-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 6px;
+  color: var(--text-light);
+  font-size: 11px;
+}
+.img-slot-empty span { font-size: 28px; }
+.img-del-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.img-upload-loading {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--coral);
+}
+.img-add-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-light);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+.img-add-btn:hover { border-color: var(--coral); color: var(--coral); background: var(--soft-pink); }
+/* 라이트박스 */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-overlay.open { display: flex; }
+.lightbox-overlay img {
+  max-width: 94vw;
+  max-height: 88vh;
+  border-radius: 10px;
+  object-fit: contain;
+}
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  line-height: 1;
+  background: none;
+  border: none;
+}
 </style>
+
+
+<script>
+// ===== CLOUDINARY CONFIG =====
+const CLD_CLOUD = 'dxln13ofx';
+const CLD_PRESET = 'mt4u0sto';
+const CLD_API_KEY = '941926796916193';
+
+// 섹션별 이미지 키
+const IMG_SECTIONS = {
+  venue:    { label: '📸 웨딩홀 참고 이미지', key: 'imgs_venue' },
+  sdm:      { label: '📸 스드메 참고 이미지', key: 'imgs_sdm' },
+  jewel:    { label: '📸 예물 참고 이미지',   key: 'imgs_jewel' },
+  trousseau:{ label: '📸 혼수 참고 이미지',   key: 'imgs_trousseau' },
+  home:     { label: '📸 신혼집 참고 이미지', key: 'imgs_home' },
+  interior: { label: '📸 인테리어 참고 이미지', key: 'imgs_interior' },
+};
+
+// ── Cloudinary 업로드 ──
+async function uploadToCloudinary(file) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLD_PRESET);
+  fd.append('api_key', CLD_API_KEY);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`, {
+    method: 'POST', body: fd
+  });
+  const json = await res.json();
+  if (json.secure_url) return json.secure_url;
+  throw new Error(json.error?.message || '업로드 실패');
+}
+
+// ── 이미지 갤러리 렌더 ──
+function renderImgGallery(sectionKey) {
+  const cfg = IMG_SECTIONS[sectionKey];
+  const imgs = get(cfg.key, []);
+  const card = document.getElementById('imgCard_' + sectionKey);
+  if (!card) return;
+
+  card.innerHTML = `<div class="img-gallery-title">${cfg.label}</div>`;
+  const grid = document.createElement('div');
+  grid.className = 'img-grid';
+
+  imgs.forEach((url, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'img-slot';
+    slot.innerHTML = `
+      <img src="${url}" alt="참고이미지" onclick="openLightbox('${url}')">
+      <button class="img-del-btn" onclick="delImg('${sectionKey}',${i},event)">×</button>`;
+    grid.appendChild(slot);
+  });
+
+  // 추가 슬롯 (빈칸)
+  const addSlot = document.createElement('div');
+  addSlot.className = 'img-slot';
+  addSlot.id = 'imgAddSlot_' + sectionKey;
+  addSlot.innerHTML = `<div class="img-slot-empty"><span>📷</span><span>추가</span></div>`;
+  addSlot.onclick = () => triggerImgUpload(sectionKey);
+  grid.appendChild(addSlot);
+
+  card.appendChild(grid);
+
+  // 숨김 파일 input
+  let inp = document.getElementById('imgInput_' + sectionKey);
+  if (!inp) {
+    inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*';
+    inp.multiple = true;
+    inp.id = 'imgInput_' + sectionKey;
+    inp.style.display = 'none';
+    inp.addEventListener('change', () => handleImgUpload(sectionKey, inp));
+    document.body.appendChild(inp);
+  }
+}
+
+function triggerImgUpload(sectionKey) {
+  document.getElementById('imgInput_' + sectionKey)?.click();
+}
+
+async function handleImgUpload(sectionKey, inp) {
+  const files = Array.from(inp.files);
+  if (!files.length) return;
+  const slot = document.getElementById('imgAddSlot_' + sectionKey);
+  if (slot) slot.innerHTML = '<div class="img-upload-loading">업로드 중...</div>';
+
+  try {
+    for (const file of files) {
+      const url = await uploadToCloudinary(file);
+      const imgs = get(IMG_SECTIONS[sectionKey].key, []);
+      imgs.push(url);
+      set(IMG_SECTIONS[sectionKey].key, imgs);
+    }
+  } catch(e) {
+    alert('업로드 실패: ' + e.message);
+  }
+  inp.value = '';
+  renderImgGallery(sectionKey);
+}
+
+function delImg(sectionKey, idx, e) {
+  e.stopPropagation();
+  if (!confirm('이 이미지를 삭제할까요?')) return;
+  const imgs = get(IMG_SECTIONS[sectionKey].key, []);
+  imgs.splice(idx, 1);
+  set(IMG_SECTIONS[sectionKey].key, imgs);
+  renderImgGallery(sectionKey);
+}
+
+// ── 라이트박스 ──
+function openLightbox(url) {
+  const lb = document.getElementById('lightboxOverlay');
+  document.getElementById('lightboxImg').src = url;
+  lb.classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightboxOverlay').classList.remove('open');
+}
+
+// refreshAll에 갤러리 렌더 추가
+const _origRefreshAll = typeof refreshAll === 'function' ? refreshAll : null;
+</script>
 
 <!-- Firebase SDK -->
 <script>
@@ -582,7 +834,7 @@ select { cursor: pointer; }
     <div class="nav-tab" data-section="s6">💎 예물</div>
     <div class="nav-tab" data-section="s8">🛋️ 혼수</div>
     <div class="nav-tab" data-section="s9">🏠 신혼집</div>
-    <div class="nav-tab" data-section="s10">🏠 인테리어</div>
+    <div class="nav-tab" data-section="s10">🪟 인테리어</div>
     <div class="nav-tab" data-section="s11">👥 하객</div>
     <div class="nav-tab" data-section="s12">💰 축의금</div>
     <div class="nav-tab" data-section="s13">✈️ 신혼여행</div>
@@ -748,6 +1000,7 @@ select { cursor: pointer; }
 
   <div id="venueList"></div>
   <button class="btn btn-primary btn-sm" onclick="addVenue()" style="margin-top:8px;">+ 업체 추가</button>
+  <div class="img-gallery-card" style="margin-top:16px;" id="imgCard_venue"></div>
 </div>
 
 <!-- ===== S5: 스드메 비교 ===== -->
@@ -759,6 +1012,7 @@ select { cursor: pointer; }
 
   <div id="sdmList"></div>
   <button class="btn btn-primary btn-sm" onclick="addSDM()" style="margin-top:8px;">+ 업체 추가</button>
+  <div class="img-gallery-card" style="margin-top:16px;" id="imgCard_sdm"></div>
 </div>
 
 <!-- ===== S6: 예물 ===== -->
@@ -790,6 +1044,7 @@ select { cursor: pointer; }
     </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea data-key="ring_memo" placeholder="디자인, 사이즈 등"></textarea></div></div>
   </div>
+  <div class="img-gallery-card" id="imgCard_jewel"></div>
 </div>
 
 
@@ -845,6 +1100,7 @@ select { cursor: pointer; }
     </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">기타</div><textarea data-key="daily_etc"></textarea></div></div>
   </div>
+  <div class="img-gallery-card" id="imgCard_trousseau"></div>
 </div>
 
 <!-- ===== S9: 신혼집 ===== -->
@@ -856,6 +1112,7 @@ select { cursor: pointer; }
 
   <div id="homeList"></div>
   <button class="btn btn-primary btn-sm" onclick="addHome()" style="margin-top:8px;">+ 후보 추가</button>
+  <div class="img-gallery-card" style="margin-top:16px;" id="imgCard_home"></div>
 </div>
 
 <!-- ===== S10: 인테리어 ===== -->
@@ -875,7 +1132,7 @@ select { cursor: pointer; }
       <div class="field-group"><div class="field-label">공사 시작일</div><input type="date" data-key="interior_start"></div>
       <div class="field-group"><div class="field-label">공사 완료 예정일</div><input type="date" data-key="interior_end"></div>
     </div>
-  </div>
+    <div class="img-gallery-card" style="margin-top:16px;" id="imgCard_interior"></div>
 </div>
 
 <!-- ===== S11: 하객 관리 ===== -->
@@ -2186,6 +2443,7 @@ function renderEverything() {
   updateDday();
   updateBudget();
   updateCheckStats();
+  Object.keys(IMG_SECTIONS).forEach(k => renderImgGallery(k));
 }
 
 // ===== INIT =====
@@ -2220,5 +2478,12 @@ document.addEventListener('DOMContentLoaded', init);
     });
   }
 </script>
+
+<!-- 라이트박스 -->
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
 </body>
 </html>
