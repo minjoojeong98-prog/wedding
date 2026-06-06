@@ -1,5 +1,5 @@
 // CACHE VERSION - 버전 올리면 PWA 캐시 강제 갱신
-const CACHE_NAME = 'wedding-planner-v5';
+const CACHE_NAME = 'wedding-planner-v6';
 const urlsToCache = [
   '/wedding/',
   '/wedding/index.html',
