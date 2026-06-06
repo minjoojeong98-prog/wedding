@@ -1,4 +1,4 @@
-<!-- WEDDING PLANNER v2 - LINK FIELDS ADDED -->
+<!-- WEDDING PLANNER v3 - PER-ITEM LINKS IN TROUSSEAU -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -802,44 +802,47 @@ select { cursor: pointer; }
 
   <div class="card">
     <div class="card-title">가전 제품</div>
-    <!-- 가전 링크 -->
-    <div class="field-group" style="margin-bottom:12px;">
-      <div class="field-label">참고 링크</div>
-      <div class="link-row">
-        <input type="url" data-key="appliance_link" placeholder="https://...">
-        <a id="appliance_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('appliance_link_btn', event)">🔗</a>
-      </div>
-    </div>
+
     <div id="applianceList"></div>
   </div>
 
   <div class="card">
     <div class="card-title">가구</div>
-    <!-- 가구 링크 -->
-    <div class="field-group" style="margin-bottom:12px;">
-      <div class="field-label">참고 링크</div>
-      <div class="link-row">
-        <input type="url" data-key="furniture_link" placeholder="https://...">
-        <a id="furniture_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('furniture_link_btn', event)">🔗</a>
-      </div>
-    </div>
+
     <div id="furnitureList"></div>
   </div>
 
   <div class="card">
     <div class="card-title">생활용품</div>
-    <!-- 생활용품 링크 -->
-    <div class="field-group" style="margin-bottom:12px;">
-      <div class="field-label">참고 링크</div>
-      <div class="link-row">
-        <input type="url" data-key="daily_link" placeholder="https://...">
-        <a id="daily_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('daily_link_btn', event)">🔗</a>
+
+    <div style="display:grid;grid-template-columns:1fr 36px;gap:8px;align-items:end;margin-bottom:10px;">
+      <div class="field-group"><div class="field-label">식기</div><input type="text" data-key="kitchen_ware" placeholder="브랜드/수량"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <input type="url" data-key="kitchen_ware_link" placeholder="URL" style="font-size:10px;padding:3px 6px;" oninput="updateLinkBtnDynamic('kitchen_ware_link_btn',this.value)">
+        <a id="kitchen_ware_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('kitchen_ware_link_btn',event)" style="width:100%;height:22px;font-size:12px;border-radius:6px;">🔗</a>
       </div>
     </div>
-    <div class="field-row full"><div class="field-group"><div class="field-label">식기</div><input type="text" data-key="kitchen_ware" placeholder="브랜드/수량"></div></div>
-    <div class="field-row full"><div class="field-group"><div class="field-label">이불/침구</div><input type="text" data-key="bedding" placeholder="브랜드/세트"></div></div>
-    <div class="field-row full"><div class="field-group"><div class="field-label">수건</div><input type="text" data-key="towel"></div></div>
-    <div class="field-row full"><div class="field-group"><div class="field-label">주방용품</div><textarea data-key="kitchen_tools" placeholder="냄비, 프라이팬..."></textarea></div></div>
+    <div style="display:grid;grid-template-columns:1fr 36px;gap:8px;align-items:end;margin-bottom:10px;">
+      <div class="field-group"><div class="field-label">이불/침구</div><input type="text" data-key="bedding" placeholder="브랜드/세트"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <input type="url" data-key="bedding_link" placeholder="URL" style="font-size:10px;padding:3px 6px;" oninput="updateLinkBtnDynamic('bedding_link_btn',this.value)">
+        <a id="bedding_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('bedding_link_btn',event)" style="width:100%;height:22px;font-size:12px;border-radius:6px;">🔗</a>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 36px;gap:8px;align-items:end;margin-bottom:10px;">
+      <div class="field-group"><div class="field-label">수건</div><input type="text" data-key="towel"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <input type="url" data-key="towel_link" placeholder="URL" style="font-size:10px;padding:3px 6px;" oninput="updateLinkBtnDynamic('towel_link_btn',this.value)">
+        <a id="towel_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('towel_link_btn',event)" style="width:100%;height:22px;font-size:12px;border-radius:6px;">🔗</a>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 36px;gap:8px;align-items:end;margin-bottom:10px;">
+      <div class="field-group"><div class="field-label">주방용품</div><textarea data-key="kitchen_tools" placeholder="냄비, 프라이팬..."></textarea></div>
+      <div style="display:flex;flex-direction:column;gap:3px;padding-top:18px;">
+        <input type="url" data-key="kitchen_tools_link" placeholder="URL" style="font-size:10px;padding:3px 6px;" oninput="updateLinkBtnDynamic('kitchen_tools_link_btn',this.value)">
+        <a id="kitchen_tools_link_btn" class="link-open-btn disabled" href="#" target="_blank" rel="noopener" onclick="return openLink('kitchen_tools_link_btn',event)" style="width:100%;height:22px;font-size:12px;border-radius:6px;">🔗</a>
+      </div>
+    </div>
     <div class="field-row full"><div class="field-group"><div class="field-label">기타</div><textarea data-key="daily_etc"></textarea></div></div>
   </div>
 </div>
@@ -1330,6 +1333,18 @@ function updateLinkBtn(btnId, url) {
     btn.classList.add('disabled');
   }
 }
+// 동적으로 생성된 링크 버튼 (혼수 품목별 등)
+function updateLinkBtnDynamic(btnId, url) {
+  updateLinkBtn(btnId, url);
+  // 데이터 키도 저장
+  const btn = document.getElementById(btnId);
+  if (btn) {
+    // 같은 부모에서 input[type=url] 찾아 data-key로 저장
+    const parent = btn.parentElement;
+    const inp = parent ? parent.querySelector('input[type="url"][data-key]') : null;
+    if (inp && inp.dataset.key) set(inp.dataset.key, url);
+  }
+}
 
 function openLink(btnId, e) {
   const btn = document.getElementById(btnId);
@@ -1344,16 +1359,24 @@ function openLink(btnId, e) {
 function initLinkBtns() {
   document.querySelectorAll('input[data-key$="_link"]').forEach(function(inp) {
     const key = inp.dataset.key;
-    const btnId = key + '_btn';
+    // 버튼 ID: data-key에서 유추 (app_냉장고_link -> app_link_btn_냉장고 형식 대응)
+    // 버튼은 같은 부모(div)에서 찾기
+    const parent = inp.parentElement;
+    const btn = parent ? parent.querySelector('a.link-open-btn') : null;
     const val = get(key, '');
     inp.value = val;
-    updateLinkBtn(btnId, val);
-
+    if (btn) {
+      if (val) { btn.href = val; btn.classList.remove('disabled'); }
+      else { btn.href = '#'; btn.classList.add('disabled'); }
+    }
     if (!inp.__linkBound) {
       inp.__linkBound = true;
       inp.addEventListener('input', function() {
         set(key, inp.value);
-        updateLinkBtn(btnId, inp.value);
+        if (btn) {
+          if (inp.value) { btn.href = inp.value; btn.classList.remove('disabled'); }
+          else { btn.href = '#'; btn.classList.add('disabled'); }
+        }
       });
     }
   });
@@ -1921,10 +1944,12 @@ const furnitureItems = [
 ];
 function buildApplianceList() {
   const c = document.getElementById('applianceList');
-  c.innerHTML = '<div style="display:grid;grid-template-columns:80px 1fr 1fr 80px;gap:6px;padding:4px 8px;font-size:11px;color:var(--text-light);font-weight:600;"><span>품목</span><span>브랜드/모델</span><span>가격(만원)</span><span>상태</span></div>';
+  c.innerHTML = '<div style="display:grid;grid-template-columns:70px 1fr 90px 70px 36px;gap:6px;padding:4px 8px;font-size:11px;color:var(--text-light);font-weight:600;"><span>품목</span><span>브랜드/모델</span><span>가격(만원)</span><span>상태</span><span>링크</span></div>';
   applianceItems.forEach(({ key, label }) => {
+    const linkVal = get('app_'+key+'_link','');
+    const btnClass = linkVal ? '' : 'disabled';
     const row = document.createElement('div');
-    row.style.cssText = 'display:grid;grid-template-columns:80px 1fr 1fr 80px;gap:6px;margin-bottom:6px;align-items:center;';
+    row.style.cssText = 'display:grid;grid-template-columns:70px 1fr 90px 70px 36px;gap:6px;margin-bottom:8px;align-items:center;';
     row.innerHTML = `
       <div style="font-size:13px;font-weight:500;padding:0 4px;">${label}</div>
       <input type="text" data-key="app_${key}_brand" placeholder="브랜드" value="${get('app_'+key+'_brand','')}">
@@ -1933,16 +1958,22 @@ function buildApplianceList() {
         <option ${get('app_'+key+'_status','미정')==='미정'?'selected':''}>미정</option>
         <option ${get('app_'+key+'_status','')==='구매예정'?'selected':''}>구매예정</option>
         <option ${get('app_'+key+'_status','')==='완료'?'selected':''}>완료</option>
-      </select>`;
+      </select>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <input type="url" data-key="app_${key}_link" placeholder="URL" value="${linkVal}" style="font-size:10px;padding:3px 6px;" oninput="updateLinkBtnDynamic('app_link_btn_${key}',this.value)">
+        <a id="app_link_btn_${key}" class="link-open-btn ${btnClass}" href="${linkVal||'#'}" target="_blank" rel="noopener" onclick="return openLink('app_link_btn_${key}',event)" style="width:100%;height:22px;font-size:12px;border-radius:6px;">🔗</a>
+      </div>`;
     c.appendChild(row);
   });
 }
 function buildFurnitureList() {
   const c = document.getElementById('furnitureList');
-  c.innerHTML = '<div style="display:grid;grid-template-columns:80px 1fr 1fr 80px;gap:6px;padding:4px 8px;font-size:11px;color:var(--text-light);font-weight:600;"><span>품목</span><span>브랜드/모델</span><span>가격(만원)</span><span>상태</span></div>';
+  c.innerHTML = '<div style="display:grid;grid-template-columns:70px 1fr 90px 70px 36px;gap:6px;padding:4px 8px;font-size:11px;color:var(--text-light);font-weight:600;"><span>품목</span><span>브랜드/모델</span><span>가격(만원)</span><span>상태</span><span>링크</span></div>';
   furnitureItems.forEach(({ key, label }) => {
+    const linkVal = get('fur_'+key+'_link','');
+    const btnClass = linkVal ? '' : 'disabled';
     const row = document.createElement('div');
-    row.style.cssText = 'display:grid;grid-template-columns:80px 1fr 1fr 80px;gap:6px;margin-bottom:6px;align-items:center;';
+    row.style.cssText = 'display:grid;grid-template-columns:70px 1fr 90px 70px 36px;gap:6px;margin-bottom:8px;align-items:center;';
     row.innerHTML = `
       <div style="font-size:13px;font-weight:500;padding:0 4px;">${label}</div>
       <input type="text" data-key="fur_${key}_brand" placeholder="브랜드" value="${get('fur_'+key+'_brand','')}">
@@ -1951,7 +1982,11 @@ function buildFurnitureList() {
         <option ${get('fur_'+key+'_status','미정')==='미정'?'selected':''}>미정</option>
         <option ${get('fur_'+key+'_status','')==='구매예정'?'selected':''}>구매예정</option>
         <option ${get('fur_'+key+'_status','')==='완료'?'selected':''}>완료</option>
-      </select>`;
+      </select>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <input type="url" data-key="fur_${key}_link" placeholder="URL" value="${linkVal}" style="font-size:10px;padding:3px 6px;" oninput="updateLinkBtnDynamic('fur_link_btn_${key}',this.value)">
+        <a id="fur_link_btn_${key}" class="link-open-btn ${btnClass}" href="${linkVal||'#'}" target="_blank" rel="noopener" onclick="return openLink('fur_link_btn_${key}',event)" style="width:100%;height:22px;font-size:12px;border-radius:6px;">🔗</a>
+      </div>`;
     c.appendChild(row);
   });
 }
