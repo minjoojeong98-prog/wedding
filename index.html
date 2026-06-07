@@ -366,14 +366,7 @@ select { cursor:pointer; }
   <div class="section-header"><div class="section-title">🪟 인테리어</div><div class="section-subtitle">업체 비교 & 공사 계획</div></div>
   <div id="interiorList"></div>
   <button class="btn btn-primary btn-sm" onclick="addInterior()" style="margin-top:8px;">+ 업체 추가</button>
-  <div class="card" style="margin-top:16px;">
-    <div class="card-title">가전 배치 계획</div>
-    <textarea data-key="interior_layout" placeholder="방 배치, 가전 위치 계획 메모..."></textarea>
-    <div class="field-row" style="margin-top:12px;">
-      <div class="field-group"><div class="field-label">공사 시작일</div><input type="date" data-key="interior_start"></div>
-      <div class="field-group"><div class="field-label">공사 완료 예정일</div><input type="date" data-key="interior_end"></div>
-    </div>
-  </div>
+
 </div>
 
 <!-- S11: 하객 -->
@@ -413,14 +406,7 @@ select { cursor:pointer; }
   <div class="section-header"><div class="section-title">✈️ 신혼여행</div><div class="section-subtitle">후보지별 비교 & 일정 계획</div></div>
   <div id="honeyList"></div>
   <button class="btn btn-primary btn-sm" onclick="addHoney()" style="margin-top:8px;">+ 후보지 추가</button>
-  <div class="card" style="margin-top:16px;">
-    <div class="card-title">여행 준비 (공통)</div>
-    <div class="field-row">
-      <div class="field-group"><div class="field-label">여행보험</div><select data-key="travel_insurance"><option>미가입</option><option>가입 완료</option></select></div>
-      <div class="field-group"><div class="field-label">환전 (금액)</div><input type="text" data-key="travel_exchange" placeholder="달러/유로..."></div>
-    </div>
-    <div class="field-row full"><div class="field-group"><div class="field-label">일정표 메모</div><textarea data-key="honey_schedule" placeholder="DAY1 공항 출발..."></textarea></div></div>
-  </div>
+
 </div>
 
 <!-- S14: 신랑 -->
@@ -1133,14 +1119,15 @@ function updateHome(i,key,val){const l=get('homes',[]); l[i][key]=val; set('home
 function delHome(i){const l=get('homes',[]); l.splice(i,1); set('homes',l); renderHomes();}
 
 // ===== INTERIOR (인테리어) =====
-function addInterior(){const l=get('interiors',[]); l.push({name:'',estimate:'',start:'',end:''}); set('interiors',l); renderInteriors();}
+function addInterior(){const l=get('interiors',[]); l.push({name:'',estimate:'',start:'',end:'',memo:''}); set('interiors',l); renderInteriors();}
 function renderInteriors(){
-  const l=get('interiors',[]); const c=document.getElementById('interiorList'); c.innerHTML='';
+  let l=get('interiors',[]); if(l.length===0){l=[{name:'',estimate:'',start:'',end:'',memo:''}]; set('interiors',l);} const c=document.getElementById('interiorList'); c.innerHTML='';
   l.forEach(function(v,i){
     const card=document.createElement('div'); card.className='card';
     card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="card-title" style="margin:0;">🪟 업체 '+(i+1)+'</div><button class="del-btn" onclick="delInterior('+i+')">×</button></div>'
       +'<div class="field-row"><div class="field-group"><div class="field-label">업체명</div><input type="text" value="'+v.name+'" onchange="updateInterior('+i+',\'name\',this.value)"></div><div class="field-group"><div class="field-label">견적(만원)</div><input type="number" value="'+v.estimate+'" onchange="updateInterior('+i+',\'estimate\',this.value)"></div></div>'
-      +'<div class="field-row"><div class="field-group"><div class="field-label">공사 시작</div><input type="date" value="'+v.start+'" onchange="updateInterior('+i+',\'start\',this.value)"></div><div class="field-group"><div class="field-label">공사 완료</div><input type="date" value="'+v.end+'" onchange="updateInterior('+i+',\'end\',this.value)"></div></div>';
+      +'<div class="field-row"><div class="field-group"><div class="field-label">공사 시작</div><input type="date" value="'+v.start+'" onchange="updateInterior('+i+',\'start\',this.value)"></div><div class="field-group"><div class="field-label">공사 완료</div><input type="date" value="'+v.end+'" onchange="updateInterior('+i+',\'end\',this.value)"></div></div>'
+      +'<div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea onchange="updateInterior('+i+',\'memo\',this.value)">'+( v.memo||'')+'</textarea></div></div>';
     appendImgGallery(card, 'interior_'+i);
     c.appendChild(card);
   });
@@ -1149,7 +1136,7 @@ function renderInteriors(){
 // ===== HONEYMOON (신혼여행 후보지) =====
 function addHoney(){const l=get('honeys',[]); l.push({dest:'',duration:'',start:'',end:'',budget:'',status:'미정',airline:'',flight_price:'',flight_code:'',flight_status:'미예약',hotel:'',hotel_price:'',hotel_memo:'',memo:''}); set('honeys',l); renderHoney();}
 function renderHoney(){
-  const l=get('honeys',[]); const c=document.getElementById('honeyList'); if(!c) return; c.innerHTML='';
+  let l=get('honeys',[]); if(l.length===0){l=[{dest:'',duration:'',start:'',end:'',budget:'',status:'미정',airline:'',flight_price:'',flight_code:'',flight_status:'미예약',hotel:'',hotel_price:'',hotel_memo:'',memo:''}]; set('honeys',l);} const c=document.getElementById('honeyList'); if(!c) return; c.innerHTML='';
   l.forEach(function(h,i){
     const card=document.createElement('div'); card.className='card';
     card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="card-title" style="margin:0;">✈️ 후보지 '+(i+1)+'</div><button class="del-btn" onclick="delHoney('+i+')">×</button></div>'
