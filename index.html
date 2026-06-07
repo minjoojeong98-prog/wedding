@@ -1001,8 +1001,10 @@ function appendImgGallery(card, imgKey) {
   const wrap = document.createElement('div');
   wrap.className = 'img-section';
   wrap.id = 'img_' + imgKey;
+  wrap.dataset.imgkey = imgKey;
   card.appendChild(wrap);
-  renderImgGallery(imgKey, 'img_' + imgKey);
+  // DOM에 추가된 후 렌더 (setTimeout으로 다음 틱에 실행)
+  setTimeout(function() { renderImgGallery(imgKey, 'img_' + imgKey); }, 0);
 }
 
 // ===== VENUE (웨딩홀) =====
