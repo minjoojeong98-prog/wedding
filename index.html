@@ -1,4 +1,4 @@
-<!-- WEDDING PLANNER v7 - PER-ITEM IMAGES + JEWEL LIST -->
+<!-- WEDDING PLANNER v8 - HONEYMOON CANDIDATES + INTERIOR IMAGES -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -410,43 +410,11 @@ select { cursor:pointer; }
 
 <!-- S13: 신혼여행 -->
 <div class="section" id="s13">
-  <div class="section-header"><div class="section-title">✈️ 신혼여행</div><div class="section-subtitle">여행지 & 일정 계획</div></div>
-  <div class="card">
-    <div class="card-title">기본 정보</div>
-    <div class="field-row">
-      <div class="field-group"><div class="field-label">여행지</div><input type="text" data-key="honey_dest" placeholder="몰디브, 발리..."></div>
-      <div class="field-group"><div class="field-label">기간</div><input type="text" data-key="honey_duration" placeholder="5박 6일"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><div class="field-label">출발일</div><input type="date" data-key="honey_start"></div>
-      <div class="field-group"><div class="field-label">귀국일</div><input type="date" data-key="honey_end"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><div class="field-label">총 예산 (만원)</div><input type="number" data-key="honey_budget"></div>
-      <div class="field-group"><div class="field-label">예약 상태</div><select data-key="honey_status"><option>미정</option><option>알아보는 중</option><option>예약 완료</option></select></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">항공권</div>
-    <div class="field-row">
-      <div class="field-group"><div class="field-label">항공사</div><input type="text" data-key="flight_airline"></div>
-      <div class="field-group"><div class="field-label">금액 (만원)</div><input type="number" data-key="flight_price"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><div class="field-label">예약 번호</div><input type="text" data-key="flight_code"></div>
-      <div class="field-group"><div class="field-label">상태</div><select data-key="flight_status"><option>미예약</option><option>예약 완료</option></select></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">호텔/숙소</div>
-    <div class="field-row">
-      <div class="field-group"><div class="field-label">숙소명</div><input type="text" data-key="hotel_name"></div>
-      <div class="field-group"><div class="field-label">금액 (만원)</div><input type="number" data-key="hotel_price"></div>
-    </div>
-    <div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea data-key="hotel_memo"></textarea></div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">여행 준비</div>
+  <div class="section-header"><div class="section-title">✈️ 신혼여행</div><div class="section-subtitle">후보지별 비교 & 일정 계획</div></div>
+  <div id="honeyList"></div>
+  <button class="btn btn-primary btn-sm" onclick="addHoney()" style="margin-top:8px;">+ 후보지 추가</button>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">여행 준비 (공통)</div>
     <div class="field-row">
       <div class="field-group"><div class="field-label">여행보험</div><select data-key="travel_insurance"><option>미가입</option><option>가입 완료</option></select></div>
       <div class="field-group"><div class="field-label">환전 (금액)</div><input type="text" data-key="travel_exchange" placeholder="달러/유로..."></div>
@@ -1177,6 +1145,29 @@ function renderInteriors(){
     c.appendChild(card);
   });
 }
+
+// ===== HONEYMOON (신혼여행 후보지) =====
+function addHoney(){const l=get('honeys',[]); l.push({dest:'',duration:'',start:'',end:'',budget:'',status:'미정',airline:'',flight_price:'',flight_code:'',flight_status:'미예약',hotel:'',hotel_price:'',hotel_memo:'',memo:''}); set('honeys',l); renderHoney();}
+function renderHoney(){
+  const l=get('honeys',[]); const c=document.getElementById('honeyList'); if(!c) return; c.innerHTML='';
+  l.forEach(function(h,i){
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="card-title" style="margin:0;">✈️ 후보지 '+(i+1)+'</div><button class="del-btn" onclick="delHoney('+i+')">×</button></div>'
+      +'<div class="field-row"><div class="field-group"><div class="field-label">여행지</div><input type="text" value="'+h.dest+'" placeholder="몰디브, 발리..." onchange="updateHoney('+i+','dest',this.value)"></div><div class="field-group"><div class="field-label">기간</div><input type="text" value="'+h.duration+'" placeholder="5박 6일" onchange="updateHoney('+i+','duration',this.value)"></div></div>'
+      +'<div class="field-row"><div class="field-group"><div class="field-label">출발일</div><input type="date" value="'+h.start+'" onchange="updateHoney('+i+','start',this.value)"></div><div class="field-group"><div class="field-label">귀국일</div><input type="date" value="'+h.end+'" onchange="updateHoney('+i+','end',this.value)"></div></div>'
+      +'<div class="field-row"><div class="field-group"><div class="field-label">예산 (만원)</div><input type="number" value="'+h.budget+'" onchange="updateHoney('+i+','budget',this.value)"></div><div class="field-group"><div class="field-label">예약 상태</div><select onchange="updateHoney('+i+','status',this.value)"><option '+(h.status==='미정'?'selected':'')+'>미정</option><option '+(h.status==='알아보는 중'?'selected':'')+'>알아보는 중</option><option '+(h.status==='예약 완료'?'selected':'')+'>예약 완료</option></select></div></div>'
+      +'<div style="font-size:12px;font-weight:600;color:var(--text-light);margin:10px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border);">항공권</div>'
+      +'<div class="field-row"><div class="field-group"><div class="field-label">항공사</div><input type="text" value="'+h.airline+'" onchange="updateHoney('+i+','airline',this.value)"></div><div class="field-group"><div class="field-label">금액 (만원)</div><input type="number" value="'+h.flight_price+'" onchange="updateHoney('+i+','flight_price',this.value)"></div></div>'
+      +'<div class="field-row"><div class="field-group"><div class="field-label">예약 번호</div><input type="text" value="'+h.flight_code+'" onchange="updateHoney('+i+','flight_code',this.value)"></div><div class="field-group"><div class="field-label">상태</div><select onchange="updateHoney('+i+','flight_status',this.value)"><option '+(h.flight_status==='미예약'?'selected':'')+'>미예약</option><option '+(h.flight_status==='예약 완료'?'selected':'')+'>예약 완료</option></select></div></div>'
+      +'<div style="font-size:12px;font-weight:600;color:var(--text-light);margin:10px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border);">호텔/숙소</div>'
+      +'<div class="field-row"><div class="field-group"><div class="field-label">숙소명</div><input type="text" value="'+h.hotel+'" onchange="updateHoney('+i+','hotel',this.value)"></div><div class="field-group"><div class="field-label">금액 (만원)</div><input type="number" value="'+h.hotel_price+'" onchange="updateHoney('+i+','hotel_price',this.value)"></div></div>'
+      +'<div class="field-row full"><div class="field-group"><div class="field-label">메모</div><textarea onchange="updateHoney('+i+','memo',this.value)">'+h.memo+'</textarea></div></div>';
+    appendImgGallery(card, 'honey_'+i);
+    c.appendChild(card);
+  });
+}
+function updateHoney(i,key,val){const l=get('honeys',[]); l[i][key]=val; set('honeys',l);}
+function delHoney(i){const l=get('honeys',[]); l.splice(i,1); set('honeys',l); renderHoney();}
 function updateInterior(i,key,val){const l=get('interiors',[]); l[i][key]=val; set('interiors',l);}
 function delInterior(i){const l=get('interiors',[]); l.splice(i,1); set('interiors',l); renderInteriors();}
 
@@ -1187,7 +1178,7 @@ function refreshAll(){
   renderSchedules(); renderScheduleDetails();
   renderJewels(); renderVenues(); renderSDM();
   renderGuests(); renderGifts();
-  renderHomes(); renderInteriors();
+  renderHomes(); renderInteriors(); renderHoney();
   bindInputs(); initLinkBtns();
   updateDday(); updateBudget(); updateCheckStats();
 }
